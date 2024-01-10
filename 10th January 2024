@@ -1,0 +1,62 @@
+class Solution {
+    public Map<Integer, List<Integer>> v = new HashMap<>(); // Adjacency list
+
+    // Create undirected graph for every parent-child -> BFS
+    public void createGraph(TreeNode root) {
+        // Initialize empty lists for all nodes
+        for (TreeNode node : treeToArray(root)) {
+            v.put(node.val, new ArrayList<>());
+        }
+
+        Queue<Pair<TreeNode, Integer>> q = new LinkedList<>();
+        q.offer(new Pair<>(root, -1));
+        while (!q.isEmpty()) {
+            Pair<TreeNode, Integer> pair = q.poll();
+            TreeNode node = pair.getKey();
+            int parent = pair.getValue();
+            if (parent != -1) {
+                v.get(parent).add(node.val);
+                v.get(node.val).add(parent);
+            }
+            if (node.left != null) q.offer(new Pair<>(node.left, node.val));
+            if (node.right != null) q.offer(new Pair<>(node.right, node.val));
+        }
+    }
+    public int amountOfTime(TreeNode root, int start) {
+        createGraph(root);
+
+        // Start BFS
+        Queue<Integer> q = new LinkedList<>();
+        Set<Integer> seen = new HashSet<>();
+        q.offer(start);
+        seen.add(start);
+        int time = 0;
+        while (!q.isEmpty()) {
+            int n = q.size();
+            while (n-- > 0) {
+                int node = q.poll();
+                for (int neighbor : v.get(node)) { // Now v.get(node) won't be null
+                    if (!seen.contains(neighbor)) {
+                        q.offer(neighbor);
+                        seen.add(neighbor);
+                    }
+                }
+            }
+            time++;
+        }
+        return time - 1;
+    }
+
+    private List<TreeNode> treeToArray(TreeNode root) {
+        List<TreeNode> nodes = new ArrayList<>();
+        Queue<TreeNode> q = new LinkedList<>();
+        if (root != null) q.offer(root);
+        while (!q.isEmpty()) {
+            TreeNode node = q.poll();
+            nodes.add(node);
+            if (node.left != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+        return nodes;
+    }
+}
