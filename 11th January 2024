@@ -1,0 +1,25 @@
+class Solution {
+    public int maxAncestorDiff(TreeNode root) {
+         return findMaxAncestorDiff(root, root.val, root.val);
+    }
+
+    private int findMaxAncestorDiff(TreeNode node, int mini, int maxi) {
+        if (node == null) {
+            return maxi - mini;
+        }
+
+        // Update mini and maxi for the child nodes
+        mini = Math.min(mini, node.val);
+        maxi = Math.max(maxi, node.val);
+
+        // Recursive calls for left and right child nodes
+        int leftDiff = findMaxAncestorDiff(node.left, mini, maxi);
+        int rightDiff = findMaxAncestorDiff(node.right, mini, maxi);
+
+        // Calculate the maximum ancestor difference for the current node
+        int currentDiff = Math.max(Math.abs(node.val - mini), Math.abs(node.val - maxi));
+
+        // Return the maximum of the three differences
+        return Math.max(currentDiff, Math.max(leftDiff, rightDiff));
+    }
+}
