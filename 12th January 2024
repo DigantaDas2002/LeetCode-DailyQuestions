@@ -1,0 +1,28 @@
+class Solution {
+    public boolean halvesAreAlike(String s) {
+         int length = s.length();
+        int halfLength = length / 2;
+
+        // Split the string into two halves
+        String a = s.substring(0, halfLength);
+        String b = s.substring(halfLength);
+
+        // Count vowels in each half
+        int countA = countVowels(a);
+        int countB = countVowels(b);
+
+        // Check if the counts are equal
+        return countA == countB;
+    }
+
+    private static int countVowels(String str) {
+        String vowels = "aeiouAEIOU";
+        int count = 0;
+        for (char c : str.toCharArray()) {
+            if (vowels.indexOf(c) != -1) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
