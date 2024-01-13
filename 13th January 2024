@@ -1,0 +1,27 @@
+class Solution {
+    public int minSteps(String s, String t) {
+        if (s.length() != t.length()) {
+            throw new IllegalArgumentException("Input strings must have the same length");
+        }
+
+        // Count the frequency of each character in strings s and t
+        Map<Character, Integer> frequencyMap = new HashMap<>();
+
+        for (char ch : s.toCharArray()) {
+            frequencyMap.put(ch, frequencyMap.getOrDefault(ch, 0) + 1);
+        }
+
+        // Calculate the difference in frequencies for t
+        int steps = 0;
+        for (char ch : t.toCharArray()) {
+            int freq = frequencyMap.getOrDefault(ch, 0);
+            if (freq > 0) {
+                frequencyMap.put(ch, freq - 1);
+            } else {
+                steps++;
+            }
+        }
+
+        return steps;
+    }
+}
