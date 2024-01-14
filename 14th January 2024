@@ -1,0 +1,39 @@
+class Solution {
+    public boolean closeStrings(String word1, String word2) {
+        if (word1.length() != word2.length()) {
+            return false;
+        }
+
+        // Step 2: Check if character sets are the same
+        Set<Character> chars1 = getCharacterSet(word1);
+        Set<Character> chars2 = getCharacterSet(word2);
+        if (!chars1.equals(chars2)) {
+            return false;
+        }
+
+        // Step 3: Check if frequency arrays are equivalent
+        int[] freq1 = getCharacterFrequencyArray(word1);
+        int[] freq2 = getCharacterFrequencyArray(word2);
+
+        Arrays.sort(freq1);
+        Arrays.sort(freq2);
+
+        return Arrays.equals(freq1, freq2);
+    }
+
+    private static Set<Character> getCharacterSet(String word) {
+        Set<Character> charSet = new java.util.HashSet<>();
+        for (char ch : word.toCharArray()) {
+            charSet.add(ch);
+        }
+        return charSet;
+    }
+
+    private static int[] getCharacterFrequencyArray(String word) {
+        int[] frequency = new int[26]; // Assuming lowercase English letters
+        for (char ch : word.toCharArray()) {
+            frequency[ch - 'a']++;
+        }
+        return frequency;
+    }
+}
