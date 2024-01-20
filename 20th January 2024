@@ -1,0 +1,54 @@
+//63ms Runtime
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+        int MOD = 1000000007;
+        int n = arr.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+        Stack<Integer> s1 = new Stack<>();
+        Stack<Integer> s2 = new Stack<>();
+        
+        for (int i = 0; i < n; i++) {
+            while (!s1.isEmpty() && arr[s1.peek()] > arr[i]) {
+                s1.pop();
+            }
+            left[i] = s1.isEmpty() ? i + 1 : i - s1.peek();
+            s1.push(i);
+        }
+        
+        for (int i = n - 1; i >= 0; i--) {
+            while (!s2.isEmpty() && arr[s2.peek()] >= arr[i]) {
+                s2.pop();
+            }
+            right[i] = s2.isEmpty() ? n - i : s2.peek() - i;
+            s2.push(i);
+        }
+        
+        long res = 0;
+        for (int i = 0; i < n; i++) {
+            res = (res + (long)arr[i] * left[i] * right[i]) % MOD;
+        }
+        return (int)res;
+    }
+}
+
+//1004ms Runtime
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+         long MOD = 1000000007L;
+        long sum = 0;
+        for (int i = 0; i < arr.length; i++) {
+            long left = i;
+            long right = i;
+            while (left > 0 && arr[i] <= arr[(int)left - 1]) {
+                left--;
+            }
+            while (right < arr.length - 1 && arr[i] < arr[(int)right + 1]) {
+                right++;
+            }
+            sum = sum + (((i - left + 1) * (right - i + 1)) * arr[i]);
+            sum %= MOD;
+        }
+        return (int)sum;
+    }
+}
