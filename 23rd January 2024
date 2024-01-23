@@ -1,0 +1,34 @@
+class Solution {
+    public int maxLength(List<String> arr) {
+      return maxLengthHelper(arr, 0, "");
+    }
+
+    private int maxLengthHelper(List<String> arr, int index, String current) {
+        // Check if the current string has unique characters
+        if (!hasUniqueCharacters(current)) {
+            return 0;
+        }
+
+        // Calculate the length of the current string
+        int currentLength = current.length();
+
+        // Iterate through the array and try adding each string to the current string
+        for (int i = index; i < arr.size(); i++) {
+            int nextLength = maxLengthHelper(arr, i + 1, current + arr.get(i));
+            currentLength = Math.max(currentLength, nextLength);
+        }
+
+        return currentLength;
+    }
+
+    private boolean hasUniqueCharacters(String str) {
+        int[] count = new int[26];
+        for (char c : str.toCharArray()) {
+            if (count[c - 'a'] > 0) {
+                return false; // Duplicate character found
+            }
+            count[c - 'a']++;
+        }
+        return true;  
+    }
+}
