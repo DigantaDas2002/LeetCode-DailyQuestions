@@ -1,0 +1,29 @@
+class Solution {
+    public int pseudoPalindromicPaths (TreeNode root) {
+       return countPseudoPalindromicPaths(root, new int[10]);
+    }
+    
+    private int countPseudoPalindromicPaths(TreeNode node, int[] count) {
+        if (node == null) {
+            return 0;
+        }
+
+        count[node.val]++;
+        if (node.left == null && node.right == null) {
+            int oddCount = 0;
+            for (int freq : count) {
+                if (freq % 2 == 1) {
+                    oddCount++;
+                }
+            }
+            count[node.val]--; // Backtrack to the previous state
+            return (oddCount <= 1) ? 1 : 0;
+        }
+
+        int leftPaths = countPseudoPalindromicPaths(node.left, count);
+        int rightPaths = countPseudoPalindromicPaths(node.right, count);
+
+        count[node.val]--; // Backtrack to the previous state
+        return leftPaths + rightPaths; 
+    }
+}
