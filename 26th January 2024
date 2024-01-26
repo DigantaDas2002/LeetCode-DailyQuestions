@@ -1,0 +1,46 @@
+class Solution {
+    private static final int MOD = 1000000007;
+
+    public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        // Memoization array to store intermediate results
+        int[][][] memo = new int[m][n][maxMove + 1];
+        for (int[][] arr : memo) {
+            for (int[] subArr : arr) {
+                Arrays.fill(subArr, -1);
+            }
+        }
+
+        // Recursive call to DFS with memoization
+        return dfs(m, n, maxMove, startRow, startColumn, memo);
+    }
+
+    private int dfs(int m, int n, int maxMove, int i, int j, int[][][] memo) {
+        // Base cases
+        if (i < 0 || i >= m || j < 0 || j >= n) {
+            // Out of the grid boundary
+            return 1;
+        }
+        if (maxMove <= 0) {
+            // No more moves left
+            return 0;
+        }
+
+        // Check if the result is already memoized
+        if (memo[i][j][maxMove] != -1) {
+            return memo[i][j][maxMove];
+        }
+
+        // Calculate the number of ways to move from the current cell
+        int ways = (
+                (dfs(m, n, maxMove - 1, i - 1, j, memo) +
+                        dfs(m, n, maxMove - 1, i + 1, j, memo)) % MOD +
+                        (dfs(m, n, maxMove - 1, i, j - 1, memo) +
+                                dfs(m, n, maxMove - 1, i, j + 1, memo)) % MOD
+        ) % MOD;
+
+        // Memoize the result
+        memo[i][j][maxMove] = ways;
+
+        return ways;
+    }
+}
