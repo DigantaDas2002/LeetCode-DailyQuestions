@@ -1,0 +1,67 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() == 0 || t.length() == 0) {
+            return "";
+        }
+
+        // Create frequency maps for characters in t and the current window
+        Map<Character, Integer> targetFreq = new HashMap<>();
+        for (char ch : t.toCharArray()) {
+            targetFreq.put(ch, targetFreq.getOrDefault(ch, 0) + 1);
+        }
+
+        Map<Character, Integer> windowFreq = new HashMap<>();
+
+        // Initialize pointers and variables
+        int left = 0;
+        int right = 0;
+        int minLen = Integer.MAX_VALUE;
+        int minLeft = 0;
+        int requiredChars = targetFreq.size();
+
+        // Count of characters that satisfy the frequency requirement
+        int formedChars = 0;
+
+        // Process the string using the sliding window technique
+        while (right < s.length()) {
+            char rightChar = s.charAt(right);
+            windowFreq.put(rightChar, windowFreq.getOrDefault(rightChar, 0) + 1);
+
+            // Check if the current character satisfies the frequency requirement
+            if (targetFreq.containsKey(rightChar) && windowFreq.get(rightChar).equals(targetFreq.get(rightChar))) {
+                formedChars++;
+            }
+
+            // Try to minimize the window by moving the left pointer
+            while (left <= right && formedChars == requiredChars) {
+                // Update the minimum window if a smaller window is found
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    minLeft = left;
+                }
+
+                char leftChar = s.charAt(left);
+                windowFreq.put(leftChar, windowFreq.get(leftChar) - 1);
+
+                // Check if the removal of the left character affects the frequency requirement
+                if (targetFreq.containsKey(leftChar) && windowFreq.get(leftChar) < targetFreq.get(leftChar)) {
+                    formedChars--;
+                }
+
+                // Move the left pointer to try to find a smaller window
+                left++;
+            }
+
+            // Move the right pointer to expand the window
+            right++;
+        }
+
+        // Check if a valid window is found
+        if (minLen == Integer.MAX_VALUE) {
+            return "";
+        }
+
+        // Return the minimum window substring
+        return s.substring(minLeft, minLeft + minLen);
+    }
+}
