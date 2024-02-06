@@ -1,0 +1,27 @@
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        if (strs == null || strs.length == 0)
+            return new ArrayList<>();
+
+        // Create a hashmap to store anagrams
+        Map<String, List<String>> map = new HashMap<>();
+
+        // Iterate through each word in the input array
+        for (String str : strs) {
+            // Sort the characters of the word to create a unique key
+            char[] charArray = str.toCharArray();
+            Arrays.sort(charArray);
+            String key = String.valueOf(charArray);
+
+            // If the key is already present in the hashmap, add the word to its list
+            // Otherwise, create a new list and add the word to it
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+            map.get(key).add(str);
+        }
+
+        // Return the values of the hashmap as the result
+        return new ArrayList<>(map.values());
+    }
+}
