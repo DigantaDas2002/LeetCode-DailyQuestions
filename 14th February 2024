@@ -1,0 +1,36 @@
+class Solution {
+    public int[] rearrangeArray(int[] nums) {
+         List<Integer> positive = new ArrayList<>();
+        List<Integer> negative = new ArrayList<>();
+
+        // Separate positive and negative integers
+        for (int num : nums) {
+            if (num > 0) {
+                positive.add(num);
+            } else {
+                negative.add(num);
+            }
+        }
+        int[] result = new int[nums.length];
+        int i = 0;
+        // Ensure first element is positive
+        if (!positive.isEmpty()) {
+            result[i++] = positive.remove(0);
+        } else {
+            result[i++] = negative.remove(0);
+        }
+        // Alternate between positive and negative integers
+        Iterator<Integer> positiveIter = positive.iterator();
+        Iterator<Integer> negativeIter = negative.iterator();
+
+        while (positiveIter.hasNext() || negativeIter.hasNext()) {
+            if (negativeIter.hasNext()) {
+                result[i++] = negativeIter.next();
+            }
+            if (positiveIter.hasNext()) {
+                result[i++] = positiveIter.next();
+            }
+        }
+        return result;
+    }
+}
